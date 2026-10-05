@@ -10,5 +10,17 @@ authors.workspace = true
 keywords = ["ota", "embedded", "updater"]
 categories = ["embedded", "encoding"]
 
+[dependencies]
+serde = { workspace = true, features = ["std"] }
+ciborium = { workspace = true, features = ["std"] }
+crc32fast = { workspace = true }
+sha2 = { workspace = true }
+ed25519-dalek = { workspace = true }
+signature = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true, features = ["std"] }
+
 [lints]
 workspace = true
