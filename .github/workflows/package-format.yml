@@ -54,6 +54,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - name: Warm up the pinned toolchain (rust-toolchain.toml)
+        # dtolnay/rust-toolchain@stable installs the "stable" channel; the repo pins
+        # 1.98.1 via rust-toolchain.toml, which rustup only auto-installs on first use.
+        # Forcing that here, in its own step, avoids maturin racing that auto-install
+        # inside its own subprocess (seen as "'rustc' is not installed for the
+        # toolchain" right after a fresh "downloading N components").
+        run: rustc --version && cargo --version
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -73,6 +80,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - name: Warm up the pinned toolchain (rust-toolchain.toml)
+        run: rustc --version && cargo --version
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
