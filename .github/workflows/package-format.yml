@@ -57,13 +57,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Create virtualenv
+        run: python3 -m venv .venv
       - name: Install maturin and pytest
-        run: pip install "maturin>=1.5,<2" pytest
+        run: source .venv/bin/activate && pip install "maturin>=1.5,<2" pytest
       - name: Build and install the native extension
         working-directory: python
-        run: maturin develop --release
+        run: source ../.venv/bin/activate && maturin develop --release
       - name: pytest (golden-fixture parity)
-        run: pytest python/tests/unit/test_golden_fixtures.py -v
+        run: source .venv/bin/activate && pytest python/tests/unit/test_golden_fixtures.py -v
 
   schema:
     runs-on: ubuntu-latest
@@ -74,13 +76,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Create virtualenv
+        run: python3 -m venv .venv
       - name: Install maturin and check-jsonschema
-        run: pip install "maturin>=1.5,<2" check-jsonschema
+        run: source .venv/bin/activate && pip install "maturin>=1.5,<2" check-jsonschema
       - name: Build and install the native extension
         working-directory: python
-        run: maturin develop --release
+        run: source ../.venv/bin/activate && maturin develop --release
       - name: Extract each fixture's manifest as JSON
         run: |
+          source .venv/bin/activate
           mkdir -p /tmp/manifests
           python3 - <<'EOF'
           import json
@@ -93,5 +98,6 @@ jobs:
           EOF
       - name: Validate against manifest.schema.json
         run: |
+          source .venv/bin/activate
           check-jsonschema --schemafile docs/reference/schemas/manifest.schema.json \
             /tmp/manifests/minimal.json /tmp/manifests/delta.json /tmp/manifests/full.json
