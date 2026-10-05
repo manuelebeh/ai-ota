@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://codesphere-dev.github.io/ai-ota/schemas/manifest.schema.json",
+  "title": ".otapkg v1 manifest",
+  "description": "JSON representation of the CBOR manifest embedded in a .otapkg v1 file. See docs/reference/formats/manifest-format.md.",
+  "type": "object",
+  "required": [
+    "package_id",
+    "created_at",
+    "target_platform",
+    "chunk_count",
+    "total_payload_size",
+    "model"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "package_id": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "target_platform": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chunk_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "total_payload_size": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "license": {
+      "type": "string"
+    },
+    "model": {
+      "type": "object",
+      "required": ["quantization", "tensors", "opset", "arena_bytes", "latency_estimate_ms"],
+      "additionalProperties": true,
+      "properties": {
+        "quantization": {
+          "type": "string",
+          "enum": ["int8", "int4", "fp16", "fp32", "none"]
+        },
+        "tensors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "dtype", "shape"],
+            "additionalProperties": true,
+            "properties": {
+              "name": { "type": "string" },
+              "dtype": { "type": "string" },
+              "shape": {
+                "type": "array",
+                "items": { "type": "integer", "minimum": 0 }
+              },
+              "sparsity": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        },
+        "opset": { "type": "string" },
+        "arena_bytes": { "type": "integer", "minimum": 0 },
+        "latency_estimate_ms": { "type": "number", "minimum": 0 }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "training_run_id": { "type": "string" },
+        "dataset_hash": { "type": "string" },
+        "git_commit": { "type": "string" }
+      }
+    },
+    "base": {
+      "type": "object",
+      "required": ["package_id", "base_manifest_hash", "base_total_hash"],
+      "additionalProperties": false,
+      "properties": {
+        "package_id": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "base_manifest_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "base_total_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

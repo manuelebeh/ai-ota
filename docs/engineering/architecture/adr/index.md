@@ -9,7 +9,7 @@ _À compléter : en 2-3 phrases, ce que couvre cette section, pour qui elle est 
 
 | Fichier | Description |
 | --- | --- |
-| [0001-package-format.md](0001-package-format.md) | _à décrire_ |
+| [0001-package-format.md](0001-package-format.md) | `.otapkg` v1 binary container: header, manifest, chunk index, TLV sections, signature, trailer. Status: Proposed. |
 | [0002-delta-vs-full.md](0002-delta-vs-full.md) | _à décrire_ |
 | [0003-ab-partitions.md](0003-ab-partitions.md) | _à décrire_ |
 | [0004-signing-scheme.md](0004-signing-scheme.md) | _à décrire_ |
