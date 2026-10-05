@@ -10,6 +10,20 @@ authors.workspace = true
 keywords = ["ota", "python", "pyo3"]
 categories = ["development-tools"]
 
+[dependencies]
+ota-package = { path = "../ota-package" }
+pyo3 = { workspace = true, features = ["macros", "abi3-py310"] }
+serde_json = { workspace = true, features = ["std"] }
+
+# `extension-module` is deliberately off by default: with it enabled, a plain
+# `cargo build`/`cargo test` tries to link against libpython and fails (there is no
+# Python interpreter to link against at that point). maturin passes
+# `--features extension-module` when it builds the real Python extension, which is the
+# only place this should be turned on.
+[features]
+default = []
+extension-module = ["pyo3/extension-module"]
+
 [lints]
 workspace = true
 

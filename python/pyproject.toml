@@ -11,6 +11,9 @@ license = { text = "GPL-3.0-only" }
 
 [tool.maturin]
 python-source = "."
+manifest-path = "../crates/ota-python/Cargo.toml"
+module-name = "ai_ota._native"
+features = ["extension-module"]
 
 [tool.ruff]
 line-length = 100
